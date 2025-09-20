@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "user_id": "admin",
+    "username": "admin",
+    "password_hash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+    "roles": ["admin"],
+    "permissions": {
+      "databases": ["*"],
+      "tables": ["*"],
+      "columns": ["*"]
+    },
+    "created_at": "2024-01-01T00:00:00Z"
+  }
+}
