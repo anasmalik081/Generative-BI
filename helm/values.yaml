@@ -1,0 +1,153 @@
+# -- global variables
+gen-bi:
+  global:
+    namespace: "ai-coe"
+    replicaCount: 1
+    nameOverride: ""
+    fullnameOverride: ""
+    imagePullSecrets:
+      - name: genbisecret
+    environment: {}
+    # list of key: value
+    # GLOBAL1: value
+
+  ## @param kubeVersion Override Kubernetes version
+  ##
+  kubeVersion: ""
+
+  # -- Object that configures Deployment instance
+  deployment:
+    # -- Override default container image format
+    image:
+      name: "registry.ldc.opstree.dev/ai-coe/genbi"
+      tag: "v1
+      pullPolicy: Always
+
+    strategy: {}
+
+    # Annotation for the Deployment
+    annotations: {}
+    podAnnotations: {}
+
+    terminationGracePeriodSeconds: 60
+
+    healthProbes:
+      enabled: true
+
+    # livenessProbe: {}
+    livenessProbe:
+      # httpGet:
+      #   path: "/"
+      #   port: http
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5
+
+    # readinessProbe: {}
+    readinessProbe:
+      # httpGet:
+      #   path: "/"
+      #   port: http
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5
+
+    # command: ["/bin/sh","-c"]
+    # command: ["--access-mode", "unrestricted", "--transport", "sse"]
+    # args: ["echo 'consuming a message'; sleep 5"]
+    
+
+    environment: env-secret
+    #   VAR1: value1
+    resources: {}
+
+    # resources:
+    #   requests:
+    #     memory: 100Mi
+    #     cpu: 100m
+    #   limits:
+    #     memory: 100Mi
+    #     cpu: 100m
+
+    # Additional volumes on the output Deployment definition.
+    volumes:
+      enabled: false
+      pvc:
+        enabled: false
+        existing_claim: false
+        name: pvc
+        mountPath: /pv
+        size: 1G
+        class: "default"
+        accessModes:
+          - ReadWriteOnce
+
+      # configFileCommonHeader: |
+      #   line1
+      #   line2
+
+      configMaps:
+      #   - name: test
+      #     mountPath: /test
+      #     data:
+      #       test.conf: |
+      #         hello
+      #         hello2
+      #   - name: test-mixed
+      #     mountPath: /test3
+      #     data:
+      #       test2.conf: |
+      #         another hello
+      #     files:
+      #       - source: config.conf
+      #         destination: application2.conf
+
+    # Additional volumeMounts on the output Deployment definition.
+
+    volumeMounts: []
+    # - name: foo
+    #   mountPath: "/etc/foo"
+    #   readOnly: true
+
+    nodeSelector: {}
+
+    tolerations: []
+
+    affinity:
+      enabled: true
+      preferred:
+        enabled: true
+      required:
+        enabled: false
+      topologyKey: "topology.kubernetes.io/zone"
+
+    topologySpreadConstraints:
+      enabled: true
+
+      whenUnsatisfiable: "ScheduleAnyway"
+      topologyKey: "topology.kubernetes.io/zone"
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPU: 80
+    targetMemory: 80
+
+  service:
+    type: ClusterIP
+    annotations: {}
+    specs:
+    - port: 80
+      name: http
+      targetPort: 8000
+
+  serviceAccount:
+    create: false
+    automount: true
+    annotations: {}
+    name: ""

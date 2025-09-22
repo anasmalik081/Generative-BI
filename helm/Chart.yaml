@@ -1,0 +1,13 @@
+apiVersion: v2
+name: microservice
+description: Basic helm chart for deploying GenBI.
+type: application
+version: 0.0.1
+appVersion: "0.1.8"
+dependencies:
+- alias: gen-bi
+  name: microservice
+  version: 0.1.8
+  repository: https://ot-container-kit.github.io/helm-charts/
+maintainers:
+  - name: AbdulQadir0211
